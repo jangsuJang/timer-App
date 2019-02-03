@@ -1,59 +1,50 @@
 // Imports
 
- // Actions
+// Actions
 
 const START_TIMER = "START_TIMER";
-const PAUSE_TIMER = "PAUSE_TIMER";
-const RESUME_TIMER = "RESUME_TIMER";
-const STOP_TIMER = "STOP_TIMER";
+const RESTART_TIMER = "RESTART_TIMER";
 const ADD_SECOND = "ADD_SECOND";
 
- // Action Creators
+// Action Creators
 
- function startTimer() {
+function startTimer() {
   return {
     type: START_TIMER
   };
 }
 
- function pauseTimer() {
-  return {
-    type: PAUSE_TIMER
-  };
-}
-
- function restartTimer() {
+//presenter.js에서 이함수를 호출하면 액션의 타입을 변경  (action.type)
+//그리고 이는 리듀서 안에서 작용을함 (function reducer)
+function restartTimer() {
   return {
     type: RESTART_TIMER
   };
 }
 
- function addSecond() {
+function addSecond() {
   return {
     type: ADD_SECOND
   };
 }
 
- // Reducer
+// Reducer
 
- const TIMER_DURATION = 1500;
+const TIMER_DURATION = 1500;
 
- const initialState = {
+const initialState = {
   isPlaying: false,
   elapsedTime: 0,
   timerDuration: TIMER_DURATION
 };
 
- function reducer(state = initialState, action) {
+function reducer(state = initialState, action) {
   switch (action.type) {
     case START_TIMER:
       return applyStartTimer(state, action);
-    case PAUSE_TIMER:
-      return applyPauseTimer(state, action);
-    case RESUME_TIMER:
-      return applyResumeTimer(state, action);
-    case STOP_TIMER:
-      return applyStopTimer(state, action);
+    case RESTART_TIMER:
+      //RestartTimer가 감지되면 이는  transformation을 적용 (applyRestartTimer)
+      return applyRestartTimer(state, action);
     case ADD_SECOND:
       return applyAddSecond(state, action);
     default:
@@ -61,9 +52,9 @@ const ADD_SECOND = "ADD_SECOND";
   }
 }
 
- // Reducer Functions
+// Reducer Functions
 
- function applyStartTimer(state, action) {
+function applyStartTimer(state, action) {
   return {
     ...state,
     isPlaying: true,
@@ -71,29 +62,15 @@ const ADD_SECOND = "ADD_SECOND";
   };
 }
 
- function applyPauseTimer(state, action) {
+function applyRestartTimer(state, action) {
   return {
-    ...state,
-    isPlaying: false
-  };
-}
-
- function applyResumeTimer(state, action) {
-  return {
-    ...state,
-    isPlaying: true
-  };
-}
-
- function applyStopTimer(state, action) {
-  return {
-    ...state,
+    ...state,//이전 state를 불러옴
     isPlaying: false,
     elapsedTime: 0
   };
 }
 
- function applyAddSecond(state, action) {
+function applyAddSecond(state, action) {
   const { elapsedTime } = state;
   if (elapsedTime < TIMER_DURATION) {
     return {
@@ -108,16 +85,15 @@ const ADD_SECOND = "ADD_SECOND";
   }
 }
 
- // Exports
+// Exports
 
- const actionCreators = {
+const actionCreators = {
   startTimer,
-  pauseTimer,
   restartTimer,
   addSecond
 };
 export { actionCreators };
 
- // Default
+// Default
 
- export default reducer;
+export default reducer;

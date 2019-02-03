@@ -8,9 +8,16 @@ class Timer extends Component{
     render(){
         //로그 출력을 통하여 컴포넌트가 props를 가진다는것을 확인할수 있음 누군가가 준것이 아니라 App.js에서 인자로 넘겨준것이 아니라
         //리덕스 스토어에서 얻은것임)
-//        console.log(this.props)
-        const { isPlaying, elapsedTime, timerDuration } = this.props
-        
+        //디스패치도 넘겨준후에는 this.props에 restartTimer와 startTimer도 추가된걸 확인할수 있음 그리고 이두 함수도 사용할수 있음
+        console.log(this.props)
+        const {
+            isPlaying,
+            elapsedTime,
+            timerDuration,
+            startTimer,
+            restartTimer,
+            apple,
+        } = this.props
         return(
             <View style={styles.container}>
                 <StatusBar barStyle={"light-content"}/>
@@ -21,12 +28,13 @@ class Timer extends Component{
                     {           
                         // play버튼은 플레이중이지 않을떄만 나타나야만 한다
                         !isPlaying ? (
-                            <Button iconName="play-circle" onPress={() => alert('it works')}/>
+//                            <Button iconName="play-circle" onPress={() => alert('it works')}/>
+                            <Button iconName="play-circle" onPress={startTimer}/>
                         ) : null
                     } 
-                    { 
+                    {
                         isPlaying && (
-                            <Button iconName="stop-circle" onPress={() => alert('it works')}/>
+                            <Button iconName="stop-circle" onPress={restartTimer}/>
                         )
                     }
                     
