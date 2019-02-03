@@ -20,7 +20,9 @@ function mapDispatchToProps(dispatch){
     return {
         //각 액션을 디스패치와 묶음
         startTimer: bindActionCreators(tomatoActions.startTimer,dispatch),
-        restartTimer: bindActionCreators(tomatoActions.restartTimer,dispatch)
+        restartTimer: bindActionCreators(tomatoActions.restartTimer,dispatch),
+        //addSecond를 사용하기 위하여 디스패치에 해당 액션을 바인드
+        addSecond: bindActionCreators(tomatoActions.addSecond,dispatch),
     };
 
 }

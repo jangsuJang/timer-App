@@ -2,9 +2,42 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, StatusBar } from "react-native";
 import Button from "../Button";
 
-//StatusBar을 사용해서 아이폰위의 상태표시바를 어떻게 처리할지를 정할수 있음
+function formatTime(time){
+    let minutes = Math.floor(time/60);
+    time -= minutes * 60
+    let seconds = parseInt(time % 60 , 10);
+    return `${minutes<10 ? `0${minutes}`: minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+}
 
+//StatusBar을 사용해서 아이폰위의 상태표시바를 어떻게 처리할지를 정할수 있음
 class Timer extends Component{
+
+    //componentWillReceiveProps는 새로운 porps를 얻을때마다 자동으로 호출된다.
+    componentWillReceiveProps(nextProps){
+        const currentProps = this.props;
+//        console.log(`the current props are: ${ currentProps.isPlaying } and the new ones are ${nextProps.isPlaying}`);
+        if(!currentProps.isPlaying && nextProps.isPlaying){
+            //start the interval
+            console.log("should start");
+            const timeInterval = setInterval(
+                ()=>{currentProps.addSecond();},
+                1000,
+            );
+            //save timeInterval in state
+            this.setState({
+                timeInterval
+            });
+        }
+        else if(currentProps.isPlaying && !nextProps.isPlaying){
+            //stop the interval
+            console.log("should end");
+
+            //load timeInterval in the state
+            clearInterval(this.state.timeInterval);
+
+        }
+    }
+
     render(){
         //로그 출력을 통하여 컴포넌트가 props를 가진다는것을 확인할수 있음 누군가가 준것이 아니라 App.js에서 인자로 넘겨준것이 아니라
         //리덕스 스토어에서 얻은것임)
@@ -16,13 +49,17 @@ class Timer extends Component{
             timerDuration,
             startTimer,
             restartTimer,
-            apple,
+            addSecond,
         } = this.props
         return(
             <View style={styles.container}>
                 <StatusBar barStyle={"light-content"}/>
                 <View style={styles.upper}>
-                    <Text style={styles.time}>25:00</Text>
+                    <Text style={styles.time}>
+                        {/* 전체시간에서 경과시간을 빼서 보여줌. */}
+                        {formatTime(timerDuration-elapsedTime)}
+                        {/* {timerDuration - elapsedTime}  */}
+                    </Text>
                 </View>
                 <View style={styles.lower}>
                     {           
